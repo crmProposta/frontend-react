@@ -1,10 +1,14 @@
-import axios from 'axios';
 import React, { useEffect, useReducer, useState } from 'react';
-import { Button, Col, Container, Form, FormControl, FormGroup, Row } from 'react-bootstrap';
+import { Button, Col, Container, Form, Row } from 'react-bootstrap';
+import { toast } from 'react-toastify';
 import AuthDataSource from '../dataSource/AuthDataSource';
-import { APIError } from '../models/APIError';
-import { APIResponse } from '../models/APIResponse';
-import { ResponseStatus } from '../models/APIResponseStatusEnum';
+import { APIError } from '../models/Backend-default/APIError';
+import { APIResponse } from "../models/Backend-default/APIResponse";
+import { ResponseStatus } from "../models/Backend-default/APIResponseStatusEnum";
+import setTokensOnCookies from '../utils/CookieUtils';
+import { useNavigate } from 'react-router-dom'
+
+
 
 const cssBgBlueFullHeight = {
     height: "100%",
@@ -21,9 +25,10 @@ const formReducer = (state: any,event: any) => {
 
 export default function Login() {
     const [formData, setFormData] = useReducer(formReducer, {});
+    const navigate = useNavigate()
 
 
-    const handleChange = (e: any) => {
+    const handleFormChange = (e: any) => {
         setFormData({
             name: e.target.name,
             value: e.target.value,
@@ -33,13 +38,17 @@ export default function Login() {
     async function peformLogin(e: React.SyntheticEvent) {
         e.preventDefault()
         const result: APIResponse<any> | APIError = await AuthDataSource.login(formData.email, formData.password)
+        if (result.status.toString() == ResponseStatus[ResponseStatus.SUCCESS]) {
+            const tokens = (result as APIResponse<any>).data
+            setTokensOnCookies(tokens)
+            toast.success("Logado com sucesso")
+            
 
-        if (result.status === ResponseStatus.SUCCESS) {
-            const success = result as APIResponse<any>
-            alert("success")
+            navigate('/home', {replace: true})
+
         } else {
             const error = result as APIError
-            alert(error.message)
+            toast.error(error.message)
         }
 
     }
@@ -71,11 +80,11 @@ export default function Login() {
 
                         <Form className='pt-3' onSubmit={peformLogin}>
                             <Form.Group className='d-flex my-4'>
-                                <Form.Control onChange={handleChange} name="email" type="name" placeholder='name' size='lg' className='h-auto' />
+                                <Form.Control onChange={handleFormChange} name="email" type="name" placeholder='name' size='lg' className='h-auto' />
                             </Form.Group>
 
                             <Form.Group className='d-flex my-4'>
-                                <Form.Control onChange={handleChange} name='password' type="password" placeholder='password' size='lg' className='h-auto' />
+                                <Form.Control onChange={handleFormChange} name='password' type="password" placeholder='password' size='lg' className='h-auto' />
                             </Form.Group>
 
                             <Row className='buttons-div my-6'>

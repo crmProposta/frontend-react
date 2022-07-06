@@ -1,9 +1,9 @@
 import axios from "axios";
 import { url } from "inspector";
 import { API } from "../api/PropostaAPI";
-import { APIError } from "../models/APIError";
-import { APIResponse } from "../models/APIResponse";
-import { ResponseStatus } from "../models/APIResponseStatusEnum";
+import { APIError } from "../models/Backend-default/APIError";
+import { APIResponse } from "../models/Backend-default/APIResponse";
+import { ResponseStatus } from "../models/Backend-default/APIResponseStatusEnum";
 
 export default class AuthDataSource {
 
@@ -27,7 +27,7 @@ export default class AuthDataSource {
                 loginLabel: email,
                 password: password
             })
-            .then(res => { return this.getResponse(res.data) })
+            .then(res => { return this.getResponse(res.data) as APIResponse<any> })
             .catch(res => { return this.getAPIError(res) as APIError })
 
         return result;
@@ -36,7 +36,7 @@ export default class AuthDataSource {
 
 
     private static getResponse(data: any) {
-        if (data.status == ResponseStatus.SUCCESS.toString) {
+        if (data.status == ResponseStatus[ResponseStatus.SUCCESS]) {
             return data as APIResponse<any>
         } else {
             return this.convertDataToAPIError(data) as APIError
