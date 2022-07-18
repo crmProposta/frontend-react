@@ -10,4 +10,10 @@ function setTokensOnCookies(tokens: any) {
     cookies.set("refreshToken", tokens.refreshToken, { path: '/', expires: new Date(refreshTokenDecoded.exp * 1000) })
 }
 
-export default setTokensOnCookies
+function getAccessToken() {
+    const cookies = new Cookies()
+
+    return cookies.get("accessToken")
+}
+
+export default { setTokensOnCookies, getAccessToken }

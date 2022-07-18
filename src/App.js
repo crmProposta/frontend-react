@@ -5,6 +5,8 @@ import Login from './views/Login';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Home from './views/Home';
+import Register from "./views/Register";
+import CreateAccount from "./views/master/CreateAccount";
 
 function App() {
     return (
@@ -14,7 +16,9 @@ function App() {
             <BrowserRouter>
                 <Routes>
                     <Route path="/" element={<Login />}></Route>
+                    <Route path="/register" element={<Register />}></Route>
                     <Route path="/home" element={<Home />}></Route>
+                    <Route path={"/master/create-account"} element={<CreateAccount />}/>
                 </Routes>
 
             </BrowserRouter>

@@ -13,7 +13,11 @@ export default function Home() {
     },[])
 
     return (
-       <Sidebar></Sidebar>
+        <div style={{ display: 'flex', height: '100vh', overflow: 'scroll initial' }}>
+       <Sidebar />
+       <div>test</div>
+       </div>
+       
     )
 
 }

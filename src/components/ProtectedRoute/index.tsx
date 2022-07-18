@@ -2,18 +2,20 @@ import React, { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
 import jwt_decode from "jwt-decode"; 
 import AuthContext from "../../contexts/auth";
+import CookieUtils from "../../utils/CookieUtils";
 
+// @ts-ignore
 export default function ProtectedRoute({ component: Component, redirect }) {
   const [user, setUser] = useState(null);
   const [authenticated, setAuthenticated] = useState(false);
   const [checked, setChecked] = useState(false);
 
   useEffect(() => {
-    const accessToken = localStorage.getItem("access_token");
+    const accessToken = CookieUtils.getAccessToken()
 
     try {
-      if (accessToken !== '' && accessToken !== null) {
-        const decoded = jwt_decode(accessToken);
+      if (accessToken !== undefined && accessToken !== '') {
+        const decoded: any = jwt_decode(accessToken);
         setUser(decoded);
         setAuthenticated(true);
         setChecked(true);
