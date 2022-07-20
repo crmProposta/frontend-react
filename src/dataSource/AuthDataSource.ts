@@ -13,7 +13,7 @@ export default class AuthDataSource {
             {
                 loginLabel: email,
                 password: password
-            })
+            }, )
             .then(res => { return this.getResponse(res.data) })
             .catch(res => { return this.getAPIError(res) as APIError })
 

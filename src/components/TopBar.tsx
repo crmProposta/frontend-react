@@ -1,6 +1,6 @@
 import React from "react";
 import {FaUserCircle} from "react-icons/fa";
-import {ButtonGroup, Dropdown, DropdownButton} from "react-bootstrap";
+import {Dropdown, DropdownButton} from "react-bootstrap";
 
 export default function TopBar() {
 

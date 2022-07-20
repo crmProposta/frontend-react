@@ -11,8 +11,6 @@ import CreateAccount from "./views/master/CreateAccount";
 function App() {
     return (
         <div className='app'>
-
-
             <BrowserRouter>
                 <Routes>
                     <Route path="/" element={<Login />}></Route>

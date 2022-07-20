@@ -8,13 +8,8 @@ import './index.css';
 import {FaBars, FaRegAddressCard} from "react-icons/fa";
 import {FiArrowLeftCircle, FiArrowRightCircle} from "react-icons/fi";
 
-function FaRegLaughWink() {
-    return null;
-}
-
 export default function Sidebar() {
 
-    const [rtl, setRtl] = useState(false);
     const [collapsed, setCollapsed] = useState(false);
     const [toggled, setToggled] = useState(false);
 
@@ -29,12 +24,8 @@ export default function Sidebar() {
     const hasMasterRole = () => tokenDecoded.roles.includes("MASTER")
 
 
-    const handleCollapsedChange = (checked) => {
+    const handleCollapsedChange = () => {
         setCollapsed(!collapsed);
-    };
-
-    const handleRtlChange = (checked) => {
-        setRtl(checked);
     };
     const handleToggleSidebar = (value) => {
         setToggled(value);
