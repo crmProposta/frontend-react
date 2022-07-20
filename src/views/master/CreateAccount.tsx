@@ -128,13 +128,14 @@ export default function CreateAccount() {
 
         const result: APIResponse<any> | APIError = await MasterDataSource.createAccount(formData)
 
-        resetForm()
+
         if (result.status.toString() !== ResponseStatus[ResponseStatus.SUCCESS]) {
             const error = result as APIError
             toast.error(error.message)
             return;
         }
 
+        resetForm()
         toast.success("Conta criada com sucesso!")
 
 
