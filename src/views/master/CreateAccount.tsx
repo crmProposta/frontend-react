@@ -1,4 +1,4 @@
-import React, {useReducer} from "react";
+import React, {useReducer, useRef, useState} from "react";
 import Form from "react-bootstrap/Form";
 import {Button, OverlayTrigger, Tooltip} from "react-bootstrap";
 import AppBar from "../../components/AppBar";
@@ -9,6 +9,8 @@ import {APIError} from "../../models/Backend-default/APIError";
 import {ResponseStatus} from "../../models/Backend-default/APIResponseStatusEnum";
 import {toast} from "react-toastify";
 import {findDOMNode} from "react-dom";
+import findFormErrors from "./formValidation";
+import {ErrorsFormCreateAccount, FormCreateAccount} from "./FormCreateAccount";
 
 const formReducer = (state: any, event: any) => {
     return {
@@ -18,8 +20,17 @@ const formReducer = (state: any, event: any) => {
 }
 
 export default function CreateAccount() {
-    const [formData, setFormData] = useReducer(formReducer, {});
-    let formRef: any = ""
+    const formInitialState = {
+        loginLabel: "", password: "", confirmPassword: "", roles: [], enabled: false,
+    } as FormCreateAccount
+    const errorsInitialState = {
+        loginLabel: "", password: "", confirmPassword: "", roles: "", enabled: "",
+    } as ErrorsFormCreateAccount
+
+    const [formData, setFormData] = useReducer(formReducer, formInitialState);
+    const [formErrors, setFormErrors] = useState<ErrorsFormCreateAccount>(errorsInitialState)
+    const findErrors = (formData: FormCreateAccount): ErrorsFormCreateAccount => findFormErrors(formData)
+    let formRef = useRef(null)
 
     function generateFormSwitches() {
 
@@ -52,14 +63,14 @@ export default function CreateAccount() {
     }
 
     const handleFormChange = (e: any) => {
-        let {name, value} = getInputs(e)
+        let {name, value} = getFieldNameAndInputValue(e)
         setFormData({
             name: name,
             value: value,
         });
     }
 
-    function getInputs(e: any) {
+    function getFieldNameAndInputValue(e: any) {
         type Input = {
             name: string,
             value: any,
@@ -73,7 +84,7 @@ export default function CreateAccount() {
             if (isCheckBoxPermissions) {
                 inputs = getCheckBoxPermissionsValues(e) as Input
             } else {
-                inputs = getCheckBoxValues(e) as Input
+                inputs = getCheckBoxNormalValues(e) as Input
             }
         } else {
             inputs = {
@@ -86,20 +97,19 @@ export default function CreateAccount() {
     }
 
     function getCheckBoxPermissionsValues(e: any) {
-        const name = "roles"
-        const targetName = e.target.name
+
+        const roleChanged = e.target.name
         const oldRoles = formData.roles != null ? formData.roles : []
-        let value = [
-            ...oldRoles, targetName
-        ]
-        if (e.target.checked === false) {
-            value = value.filter(item => item !== targetName)
-        }
-        console.log(value)
-        return {name, value}
+
+        let rolesMarked = [...oldRoles, roleChanged]
+        const isRoleChangedMarked = e.target.checked
+        if (isRoleChangedMarked === false) rolesMarked = rolesMarked.filter(item => item !== roleChanged)
+
+        const name = "roles"
+        return {name, value: rolesMarked}
     }
 
-    function getCheckBoxValues(e: any) {
+    function getCheckBoxNormalValues(e: any) {
         return {
             name: e.target.name,
             value: e.target.checked
@@ -109,13 +119,16 @@ export default function CreateAccount() {
     async function handleFormSubmit(e: React.SyntheticEvent) {
         e.preventDefault()
 
-        if (formData.password !== formData.confirmPassword) {
-            toast.error("'password' and 'confirm password' fields must be equals");
+        const newErrors = findErrors(formData)
+        if (Object.keys(newErrors).length > 0) {
+            setFormErrors(newErrors)
+            toast.error("Please, fill the form correctly")
             return
         }
 
         const result: APIResponse<any> | APIError = await MasterDataSource.createAccount(formData)
 
+        resetForm()
         if (result.status.toString() !== ResponseStatus[ResponseStatus.SUCCESS]) {
             const error = result as APIError
             toast.error(error.message)
@@ -123,9 +136,24 @@ export default function CreateAccount() {
         }
 
         toast.success("Conta criada com sucesso!")
+
+
+
+    }
+
+    function resetForm() {
         // @ts-ignore
         findDOMNode(formRef).reset();
+
+        for (let formInitialStateKey in formInitialState) {
+            setFormData({
+                name: formInitialStateKey,
+                // @ts-ignore
+                value: formInitialState[formInitialStateKey]
+            })
+        }
     }
+
 
     return (
         <AppBar>
@@ -136,20 +164,29 @@ export default function CreateAccount() {
                         <Form.Label>Username</Form.Label>
                         <Form.Control onChange={handleFormChange} name="loginLabel" type="name" placeholder='username'
                                       size='lg'
-                                      className='h-auto'/>
+                                      className='h-auto'
+                                      isInvalid={!!formErrors.loginLabel}
+                        />
+                        <Form.Control.Feedback type="invalid" children={formErrors.loginLabel}/>
                     </Form.Group>
                     <Form.Group className={"p-2"}>
                         <Form.Label>Password</Form.Label>
                         <Form.Control onChange={handleFormChange} name="password" type="password"
                                       placeholder='password'
                                       size='lg'
-                                      className='h-auto'/>
+                                      className='h-auto'
+                                      isInvalid={!!formErrors.password}
+                        />
+                        <Form.Control.Feedback type="invalid" children={formErrors.password}/>
                     </Form.Group>
                     <Form.Group className={"p-2"}>
                         <Form.Label>Confirm password</Form.Label>
                         <Form.Control onChange={handleFormChange} name="confirmPassword" type="password"
                                       placeholder='Confirm password' size='lg'
-                                      className='h-auto'/>
+                                      className='h-auto'
+                                      isInvalid={!!formErrors.confirmPassword}
+                        />
+                        <Form.Control.Feedback type="invalid" children={formErrors.confirmPassword}/>
                     </Form.Group>
                     <Form.Group className={"d-flex m-auto"}>
                         <Form.Check
@@ -159,12 +196,16 @@ export default function CreateAccount() {
                             name={"enabled"}
                             label={"Let this account on active state?"}
                             onChange={handleFormChange}
+                            isInvalid={!!formErrors.enabled}
                         >
                         </Form.Check>
+                        <Form.Control.Feedback type="invalid" children={formErrors.enabled}/>
                     </Form.Group>
                     <Form.Group className={"p-2 pt-5"}>
                         <div>
+                            <Form.Control type={"hidden"} isInvalid={!!formErrors.roles}/>
                             <Form.Label>Permissions<br/>(hover on switch to show details)</Form.Label>
+                            <Form.Control.Feedback type="invalid" children={formErrors.roles}/>
                             {generateFormSwitches()}
                         </div>
                     </Form.Group>
