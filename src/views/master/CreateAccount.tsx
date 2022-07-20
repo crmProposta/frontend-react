@@ -32,15 +32,15 @@ export default function CreateAccount() {
     const findErrors = (formData: FormCreateAccount): ErrorsFormCreateAccount => findFormErrors(formData)
     let formRef = useRef(null)
 
-    function generateFormSwitches() {
+    function generateFormPermissionSwitches() {
 
-        let jsxForm: JSX.Element[] = [];
+        let jsxSwitchPermissions: JSX.Element[] = [];
 
         PERMISSIONS.names.forEach((permissionName, index) => {
             const permissionId = `switch-permission-${permissionName}`
             const tooltipId = `button-tooltip-permission-${index}`
             const desc = PERMISSIONS.descriptions[index]
-            jsxForm.push(
+            jsxSwitchPermissions.push(
                 <OverlayTrigger
                     placement="bottom"
                     overlay={<Tooltip id={tooltipId}>{desc}</Tooltip>}
@@ -59,7 +59,7 @@ export default function CreateAccount() {
             )
         })
 
-        return jsxForm
+        return jsxSwitchPermissions
     }
 
     const handleFormChange = (e: any) => {
@@ -207,7 +207,7 @@ export default function CreateAccount() {
                             <Form.Control type={"hidden"} isInvalid={!!formErrors.roles}/>
                             <Form.Label>Permissions<br/>(hover on switch to show details)</Form.Label>
                             <Form.Control.Feedback type="invalid" children={formErrors.roles}/>
-                            {generateFormSwitches()}
+                            {generateFormPermissionSwitches()}
                         </div>
                     </Form.Group>
 
