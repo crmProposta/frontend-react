@@ -1,4 +1,4 @@
-import React, {useReducer, useRef, useState} from "react";
+import React, {useEffect, useReducer, useRef, useState} from "react";
 import Form from "react-bootstrap/Form";
 import {Button, OverlayTrigger, Tooltip} from "react-bootstrap";
 import AppBar from "../../components/AppBar";
@@ -11,6 +11,8 @@ import {toast} from "react-toastify";
 import {findDOMNode} from "react-dom";
 import findFormErrors from "./formValidation";
 import {ErrorsFormCreateAccount, FormCreateAccount} from "./FormCreateAccount";
+import ResponseUtils from "../../utils/ResponseUtils";
+import ToastUtils from "../../utils/ToastUtils";
 
 const formReducer = (state: any, event: any) => {
     return {
@@ -120,27 +122,21 @@ export default function CreateAccount() {
         e.preventDefault()
 
         const newErrors = findErrors(formData)
-        if (Object.keys(newErrors).length > 0) {
-            setFormErrors(newErrors)
-            toast.error("Please, fill the form correctly")
-            return
-        }
+        setFormErrors(newErrors)
+        throwToastIfHasError(newErrors)
 
         const result: APIResponse<any> | APIError = await MasterDataSource.createAccount(formData)
-
-
-        if (result.status.toString() !== ResponseStatus[ResponseStatus.SUCCESS]) {
-            const error = result as APIError
-            toast.error(error.message)
-            return;
-        }
+        ToastUtils.throwToastIfRequestIsNotSuccessful(result)
 
         resetForm()
         toast.success("Conta criada com sucesso!")
-
-
-
     }
+
+    function throwToastIfHasError(errors: ErrorsFormCreateAccount) {
+        if (Object.keys(errors).length > 0)
+            toast.error("Please, fill the form correctly")
+    }
+
 
     function resetForm() {
         // @ts-ignore
@@ -159,7 +155,7 @@ export default function CreateAccount() {
     return (
         <AppBar>
             <div className='w-100 mx-auto'>
-                <h2 className="p-5 text-center">Create user account</h2>
+                <h2 className="p-5 text-center ">Create user account</h2>
                 <Form ref={(form: any) => formRef = form} className='m-5 my-4 w-50 mx-auto' onSubmit={handleFormSubmit}>
                     <Form.Group className={"p-2"}>
                         <Form.Label>Username</Form.Label>

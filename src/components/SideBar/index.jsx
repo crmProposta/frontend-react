@@ -16,8 +16,9 @@ export default function Sidebar() {
     const token = CookieUtils.getAccessToken();
     const navigate = useNavigate();
 
-    if (token === undefined) {
+    if (token == null || token.isEmpty) {
         navigate("/")
+        return <></>
     }
 
     const tokenDecoded = jwtDecode(token)
