@@ -7,16 +7,20 @@ import 'react-toastify/dist/ReactToastify.css';
 import Home from './views/Home';
 import Register from "./views/Register";
 import CreateAccount from "./views/master/CreateAccount";
+import RouteGuard from "./components/RouteGuard";
 
 function App() {
     return (
         <div className='app'>
             <BrowserRouter>
                 <Routes>
-                    <Route path="/" element={<Login />}></Route>
+                    <Route path="/login" element={<Login />}></Route>
                     <Route path="/register" element={<Register />}></Route>
-                    <Route path="/home" element={<Home />}></Route>
-                    <Route path={"/master/create-account"} element={<CreateAccount />}/>
+
+                    {/* Protected routes */}
+                    <Route path="/" element={<RouteGuard component={Home} />}></Route>
+                    <Route path="/home" element={<RouteGuard component={Home} />}></Route>
+                    <Route path={"/master/create-account"} element={<RouteGuard component={CreateAccount} />}/>
                 </Routes>
 
             </BrowserRouter>
