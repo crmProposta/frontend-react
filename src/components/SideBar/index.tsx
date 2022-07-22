@@ -7,6 +7,8 @@ import 'react-pro-sidebar/dist/css/styles.css';
 import './index.css';
 import {FaBars, FaRegAddressCard} from "react-icons/fa";
 import {FiArrowLeftCircle, FiArrowRightCircle} from "react-icons/fi";
+import {Roles} from "../../models/Backend-default/Roles";
+import {TokenStructure} from "../../models/Backend-default/TokenStructure";
 
 export default function Sidebar() {
 
@@ -21,25 +23,32 @@ export default function Sidebar() {
         return <></>
     }
 
-    const tokenDecoded = jwtDecode(token)
+    const tokenDecoded = jwtDecode(token) as TokenStructure
+
+    const roles: number[] = tokenDecoded.roles.map(role => {
+        // @ts-ignore
+        return Roles[role];
+    })
+    console.log(Math.min(...roles));
     const hasMasterRole = () => tokenDecoded.roles.includes("MASTER")
 
 
     const handleCollapsedChange = () => {
         setCollapsed(!collapsed);
     };
-    const handleToggleSidebar = (value) => {
+    const handleToggleSidebar = (value: any) => {
         setToggled(value);
     };
 
 
     return (<ProSidebar
-        style={{zIndex:20}}
+        style={{zIndex: 20}}
         collapsed={collapsed}
         toggled={toggled}
         onToggle={handleToggleSidebar}
     >
         <SidebarHeader
+            // @ts-ignore
             icon={FaBars}
         >
             <div
@@ -126,7 +135,7 @@ export default function Sidebar() {
                 {hasMasterRole() && (
                     <SubMenu
                         title={"Master role"}
-                        icon={<FaRegAddressCard />}
+                        icon={<FaRegAddressCard/>}
                     >
                         <MenuItem>
                             Adicionar conta

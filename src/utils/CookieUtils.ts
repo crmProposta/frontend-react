@@ -16,4 +16,11 @@ function getAccessToken() {
     return cookies.get("accessToken")
 }
 
-export default { setTokensOnCookies, getAccessToken }
+function deleteAuthTokens() {
+    const cookies = new Cookies()
+
+    cookies.remove("accessToken")
+    cookies.remove("refreshToken")
+}
+
+export default { setTokensOnCookies, getAccessToken, deleteAuthTokens }
