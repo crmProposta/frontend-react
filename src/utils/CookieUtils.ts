@@ -19,8 +19,8 @@ function getAccessToken() {
 function deleteAuthTokens() {
     const cookies = new Cookies()
 
-    cookies.remove("accessToken")
-    cookies.remove("refreshToken")
+    cookies.remove("accessToken", { path: '/'})
+    cookies.remove("refreshToken", { path: '/'})
 }
 
 export default { setTokensOnCookies, getAccessToken, deleteAuthTokens }

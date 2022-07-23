@@ -6,8 +6,9 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Home from './views/Home';
 import Register from "./views/Register";
-import CreateAccount from "./views/master/CreateAccount";
+import CreateAccount from "./views/master/users/CreateAccount/CreateAccount";
 import RouteGuard from "./components/RouteGuard";
+import ListAccount from "./views/master/users/ListAccount/ListAccount";
 
 function App() {
     return (
@@ -21,6 +22,7 @@ function App() {
                     <Route path="/" element={<RouteGuard component={Home} />}></Route>
                     <Route path="/home" element={<RouteGuard component={Home} />}></Route>
                     <Route path={"/master/create-account"} element={<RouteGuard component={CreateAccount} />}/>
+                    <Route path={"/master/list-account"} element={<RouteGuard component={ListAccount}/>}/>
                 </Routes>
 
             </BrowserRouter>

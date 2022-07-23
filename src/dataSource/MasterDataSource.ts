@@ -29,13 +29,22 @@ export default class MasterDataSource {
             }
         )
             .then(res => {
-                console.log(res);
                 return this.getResponse(res.data)
             })
             .catch(res => {
-                console.log(res);
                 return this.getAPIError(res) as APIError
             });
+    }
+
+    static async listAccount() {
+        return await API.authPath().get(
+            '/master/list-account',
+        ).then(res => {
+            console.log(res)
+            return this.getResponse(res.data)
+        }).catch(res => {
+            return this.getAPIError(res) as APIError
+        })
     }
 
     private static getResponse(data: any) {

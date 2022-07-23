@@ -8,7 +8,7 @@ export default function RouteGuard({ component: Component, ...rest }){
 
     function hasJWT() {
         let flag = false;
-        CookieUtils.getAccessToken() ? flag=true : flag=false
+        flag =  CookieUtils.getAccessToken() != null ? flag=true : flag=false
 
         return flag
     }

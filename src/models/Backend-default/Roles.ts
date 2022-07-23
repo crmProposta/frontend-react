@@ -5,3 +5,11 @@ export enum Roles {
     CUSTOMER,
     ATTENDANT,
 }
+
+export enum RolesColors {
+    MASTER = "danger",
+    ADMIN = "warning",
+    COORDINATOR = "primary",
+    CUSTOMER = "secondary",
+    ATTENDANT = "info",
+}

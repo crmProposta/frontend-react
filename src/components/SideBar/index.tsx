@@ -141,6 +141,10 @@ export default function Sidebar() {
                             Adicionar conta
                             <Link to={"/master/create-account"}/>
                         </MenuItem>
+                        <MenuItem>
+                            Listar conta
+                            <Link to={"/master/list-account"}/>
+                        </MenuItem>
                     </SubMenu>
                 )}
 
