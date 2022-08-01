@@ -1,86 +1,66 @@
-import {API} from "../api/PropostaAPI";
-import {APIError} from "../models/Backend-default/APIError";
-import {ResponseStatus} from "../models/Backend-default/APIResponseStatusEnum";
-import {APIResponse} from "../models/Backend-default/APIResponse";
-import CookieUtils from "../utils/CookieUtils";
+import { AxiosResponse } from "axios";
+import { API } from "../api/PropostaAPI";
+import { APIError } from "../models/Backend-default/APIError";
+import { APIResponse } from '../models/Backend-default/APIResponse';
+import { ResponseStatus } from "../models/Backend-default/APIResponseStatusEnum";
+import ResponseUtils from "../utils/ResponseUtils";
+import { UserCreationValidation } from "../validation/UserCreationValidation";
 
 export default class MasterDataSource {
 
     static async createAccount(form: any) {
-        let token = CookieUtils.getAccessToken();
-        token = token == null ? "" : token;
+        const validation = new UserCreationValidation(form.password, form.confirmPassword);
+        const errors = validation.validate()
 
-        if (form.password !== form.confirmPassword) {
+        if (errors.length > 0) {
             return {
                 status: ResponseStatus.ERROR,
                 code: "",
-                codeMessage: "conflictPassword",
-                message: "The password and confirm password input are not equals"
+                codeMessage: `${errors[0].variable}`,
+                message: `${errors[1].variable}`
             } as APIError
         }
-        return await API.path.post(
+
+        return await API.authPath().post(
             "/master/create-account",
             form,
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                }
-            }
         )
-            .then(res => {
-                return this.getResponse(res.data)
-            })
-            .catch(res => {
-                return this.getAPIError(res) as APIError
-            });
+        .then(res => this.getResponse(res))
+        .catch(res => this.getAPIError(res));
     }
 
     static async listAccount() {
         return await API.authPath().get(
             '/master/list-account',
-        ).then(res => {
-            console.log(res)
-            return this.getResponse(res.data)
-        }).catch(res => {
-            return this.getAPIError(res) as APIError
-        })
+        ).then(res => this.getResponse(res))
+        .catch(res => this.getAPIError(res))
     }
 
-    private static getResponse(data: any) {
-        if (data.status == ResponseStatus[ResponseStatus.SUCCESS]) {
-            return data as APIResponse<any>
-        } else {
-            return this.convertDataToAPIError(data) as APIError
-        }
+    static async disableAccount(id: number) {
+        return await API.authPath().post(
+            "/master/disable-account",
+            { id: id }
+        ).then(res => this.getResponse(res))
+        .catch(res => this.getAPIError(res))
     }
 
-    private static getAPIError(res: any) {
-
-        if (res.response.status === 403) {
-            res.response.data = {
-                codeMessage: "deniedAccess",
-                message: "You dont have access to this action"
-            }
-        } else if (res.response.data == null) {
-            res.response.data = {
-                codeMessage: res.type,
-                message: res.message
-            }
-        }
-
-        return this.convertDataToAPIError(res.response.data)
-
-
+    static async enableAccount(id: number) {
+        return await API.authPath().post(
+            "/master/enable-account",
+            { id: id }
+        ).then(res => this.getResponse(res))
+        .catch(res => this.getAPIError(res))
     }
 
-    private static convertDataToAPIError(data: any) {
-        return {
-            status: ResponseStatus.ERROR,
-            code: "",
-            codeMessage: data.codeMessage,
-            message: data.message
-        } as APIError
-
+    static async getAccountById(id: number) {
+        return await API.authPath().get(
+            `/master/get-account-by-id/${id}`
+        ).then(res => this.getResponse(res))
+        .catch(res => this.getAPIError(res))
     }
+
+    static getResponse = (res: AxiosResponse<any, any>) => ResponseUtils.getResponse(res.data) as APIResponse<any> | APIError
+
+    static getAPIError = (res: any) => ResponseUtils.getAPIError(res) as APIError
+
 }

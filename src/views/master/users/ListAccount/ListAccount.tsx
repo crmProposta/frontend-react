@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { Button, Modal } from "react-bootstrap";
+import { AccordionButton, Button, Modal } from "react-bootstrap";
 // @ts-ignore
 import BootstrapTable from 'react-bootstrap-table-next';
 import { toast } from "react-toastify";
+import { API } from "../../../../api/PropostaAPI";
 import AppBar from "../../../../components/AppBar";
 import MasterDataSource from "../../../../dataSource/MasterDataSource";
 import { APIError } from "../../../../models/Backend-default/APIError";
@@ -12,12 +13,14 @@ import { UserDTO } from "../../../../models/Backend-default/UserDTO";
 import ResponseUtils from "../../../../utils/ResponseUtils";
 import RoleUtil from "../../../../utils/RoleUtil";
 import './index.css';
+import { useNavigate } from 'react-router-dom';
 
 export default function ListAccount() {
 
     const [data, setData] = useState([] as any[])
     const [disableAccountIdOnClick, setDisableAccountIdOnClick] = useState(-1)
-    
+    const navigate = useNavigate()
+
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
     // @ts-ignore
@@ -38,15 +41,42 @@ export default function ListAccount() {
     }
 
     useEffect(() => {
-        if (disableAccountIdOnClick == null || disableAccountIdOnClick === -1) return
+        async function toggleActivationAccountOnClick() {
+            if (disableAccountIdOnClick == null || disableAccountIdOnClick === -1) return
 
-        const dataUpdated = returnDataArrayWithUserDisabledOnFrontEnd((data as UserDTO[]), disableAccountIdOnClick)
-        setData(dataUpdated)
+            const user = data.find(user => user.id === disableAccountIdOnClick)
+            if (user == null) {
+                toast.error("user doesn't exists")
+                removeAccountIdOnClick()
+                return
+            }
 
-        removeAccountIdOnClick()
+            const isChangedOnBackend = await toggleActivationStatusOnBackEnd(disableAccountIdOnClick, user.enabled)
+            if (ResponseUtils.responseIsNotSuccessful(isChangedOnBackend.status)) {
+                toast.error((isChangedOnBackend as APIError).message)
+                removeAccountIdOnClick()
+                return
+            }
+                
+            const dataUpdated = updateTableWithUserToggled((data as UserDTO[]), disableAccountIdOnClick)
+            setData(dataUpdated)
+
+            toast.success("changed successfully")
+            removeAccountIdOnClick()
+        }
+        toggleActivationAccountOnClick()
+
     }, [data, disableAccountIdOnClick])
 
-    function returnDataArrayWithUserDisabledOnFrontEnd(data: UserDTO[], disableAccountIdOnClick: number) {
+    
+
+    async function toggleActivationStatusOnBackEnd(disableAccountIdOnClick: number, isToDisable : boolean) {
+        return isToDisable ? await MasterDataSource.disableAccount(disableAccountIdOnClick)
+            : await MasterDataSource.enableAccount(disableAccountIdOnClick)
+    }
+
+
+    function updateTableWithUserToggled(data: UserDTO[], disableAccountIdOnClick: number) {
         return data.map(account => {
             if (account.id === disableAccountIdOnClick) {
                 let enabled = account.enabled
@@ -61,14 +91,13 @@ export default function ListAccount() {
         setDisableAccountIdOnClick(-1)
     }
 
-    function modalDisableAccount(id: number): React.MouseEventHandler<HTMLButtonElement> | undefined {
-
-        //TODO: Add a modal do confirm if want to disable/enable the selected account. 
-        //TODO: Show user details on modal
+    function toggleEnabledAccont(id: number): React.MouseEventHandler<HTMLButtonElement> | undefined {
         setDisableAccountIdOnClick(id)
-
-
         return undefined
+    }
+
+    function redirectToEditAccount(id: number) {
+        navigate(`/master/edit-account/${id}`)
     }
 
     const bootstrapTable2ExpandRowListener = {
@@ -133,10 +162,9 @@ export default function ListAccount() {
     }, {
         dataField: 'editAction',
         text: 'Edit',
-        isDummyField: true,
-        formatter: (cellContent: any) => {
+        formatter: (cellCOntent: any, row: any) => {
             return (
-                <Button className={"text-light-on-hover"} variant={"outline-warning"} size={"sm"}> Edit</Button>
+                <Button className={"text-light-on-hover"} onClick={() => redirectToEditAccount(row.id)} variant={"outline-warning"} size={"sm"}> Edit</Button>
             );
         }
     }, {
@@ -146,7 +174,7 @@ export default function ListAccount() {
             const color = row.enabled ? "outline-danger" : "outline-primary"
             const text = row.enabled ? "disable" : "enable"
             return (
-                <Button variant={color} size={"sm"} onClick={() => modalDisableAccount(row.id)}> {text}</Button>
+                <Button variant={color} size={"sm"} onClick={() => toggleEnabledAccont(row.id)}> {text}</Button>
             );
         }
     }];

@@ -9,6 +9,7 @@ import Register from "./views/Register";
 import CreateAccount from "./views/master/users/CreateAccount/CreateAccount";
 import RouteGuard from "./components/RouteGuard";
 import ListAccount from "./views/master/users/ListAccount/ListAccount";
+import EditAccount from './views/master/users/EditAccount/EditAccount';
 
 function App() {
     return (
@@ -21,8 +22,11 @@ function App() {
                     {/* Protected routes */}
                     <Route path="/" element={<RouteGuard component={Home} />}></Route>
                     <Route path="/home" element={<RouteGuard component={Home} />}></Route>
+
+                    {/* Masters routes */}
                     <Route path={"/master/create-account"} element={<RouteGuard component={CreateAccount} />}/>
                     <Route path={"/master/list-account"} element={<RouteGuard component={ListAccount}/>}/>
+                    <Route path={"/master/edit-account/:id"} element={<RouteGuard component={EditAccount}/>}/>
                 </Routes>
 
             </BrowserRouter>
