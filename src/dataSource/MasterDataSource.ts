@@ -5,6 +5,7 @@ import { APIResponse } from '../models/Backend-default/APIResponse';
 import { ResponseStatus } from "../models/Backend-default/APIResponseStatusEnum";
 import ResponseUtils from "../utils/ResponseUtils";
 import { UserCreationValidation } from "../validation/UserCreationValidation";
+import findFormErrors from "../views/master/users/CreateAccount/formValidation";
 
 export default class MasterDataSource {
 
@@ -17,7 +18,7 @@ export default class MasterDataSource {
                 status: ResponseStatus.ERROR,
                 code: "",
                 codeMessage: `${errors[0].variable}`,
-                message: `${errors[1].variable}`
+                message: `${errors[0].variable}`
             } as APIError
         }
 
@@ -27,6 +28,26 @@ export default class MasterDataSource {
         )
         .then(res => this.getResponse(res))
         .catch(res => this.getAPIError(res));
+    }
+
+    static async editAccount(form: any) {
+        const validation = new UserCreationValidation(form.password, form.confirmPassword);
+        const errors = validation.validate()
+
+        if (errors.length > 0) {
+            return {
+                status: ResponseStatus.ERROR,
+                code: "",
+                codeMessage: `${errors[0].variable}`,
+                message: `${errors[0].variable}`
+            } as APIError
+        }
+
+        return await API.authPath().post(
+            "/master/edit-account",
+            form,
+        ).then(res => this.getResponse(res))
+        .catch(res => this.getAPIError(res))
     }
 
     static async listAccount() {

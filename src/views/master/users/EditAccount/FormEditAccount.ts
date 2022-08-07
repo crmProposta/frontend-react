@@ -1,5 +1,6 @@
 export type FormEditAccount = {
     loginLabel: string,
+    isToChangePassword: boolean
     password: string,
     confirmPassword: string,
     roles: string[]

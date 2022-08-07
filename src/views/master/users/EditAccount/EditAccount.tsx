@@ -25,7 +25,7 @@ export default function EditAccount() {
     const navigate = useNavigate()
 
     const formInitialState = {
-        loginLabel: "", password: "", confirmPassword: "", roles: [], enabled: false,
+        loginLabel: "", password: "", isToChangePassword: false, confirmPassword: "", roles: [], enabled: false,
     } as FormEditAccount
     const errorsInitialState = {
         loginLabel: "", password: "", confirmPassword: "", roles: "", enabled: "",
@@ -38,15 +38,14 @@ export default function EditAccount() {
 
 
     useEffect(() => {
-        const {id} = router;
-        console.log(id)
+        const { id } = router;
 
         getAccountById(id)
-    },[])
+    }, [])
 
     useEffect(() => {
         console.log(formData)
-    },[formData])
+    }, [formData])
 
     async function getAccountById(id: any) {
         let response: APIResponse<any> | APIError = await MasterDataSource.getAccountById(id)
@@ -56,32 +55,65 @@ export default function EditAccount() {
         }
 
         let data = (response as APIResponse<any>).data
+        setFormData({
+            name: "id",
+            value: id,
+        });
         //Pegando os inputs baseado na chave da data,
         Object.keys(data).forEach(key => {
 
             let querySelectorLabel = ""
+            let querySelectorCheckBoxLabelId: string[] = []
 
-            switch(key) {
+            switch (key) {
                 case "username": {
                     querySelectorLabel = "loginLabel"; break;
                 }
                 case "enabled": {
                     querySelectorLabel = "enabled"; break;
                 }
+                case "roles": {
+                    data.roles.forEach((role: string) => {
+                        querySelectorCheckBoxLabelId.push(`${role}`)
+                    })
+
+                }
                 default: querySelectorLabel = ""; break;
             }
-            
-            let value: any = "";
-            if (key !== "roles") {
+
+            let element: any = "";
+            const event = new Event('input', { bubbles: true });
+            if (key === "enabled") {
                 // @ts-ignore
-                value = findDOMNode(formRef).querySelector(`input[name='${querySelectorLabel}']`);
+                element = findDOMNode(formRef).querySelector(`input[name='${querySelectorLabel}']`);
+                element.checked = data[key]
+                setFormData({
+                    name: key,
+                    value: data[key]
+                })
+            } else if (key !== "roles" && querySelectorLabel !== "") {
+                console.log(querySelectorLabel)
+                // @ts-ignore
+                element = findDOMNode(formRef).querySelector(`input[name='${querySelectorLabel}']`);
+                element.value = data[key]
+                setFormData({
+                    name: querySelectorLabel,
+                    value: data[key]
+                })
             } else if (key === "roles") {
-                //TODO: pegar os checkboxes
+                querySelectorCheckBoxLabelId.forEach((role: string) => {
+                    // @ts-ignore
+                    element = findDOMNode(formRef).querySelector(`input[name='${role}']`)
+                    element.checked = true
+                })
+                setFormData({
+                    name: key,
+                    value: querySelectorCheckBoxLabelId
+                })
             }
-            console.log(value)
-          });
-        console.log(data)
+        });
     }
+
     function generateFormPermissionSwitches() {
 
         let jsxSwitchPermissions: JSX.Element[] = [];
@@ -113,11 +145,26 @@ export default function EditAccount() {
     }
 
     const handleFormChange = (e: any) => {
-        let {name, value} = getFieldNameAndInputValue(e)
+        console.log(e)
+        let { name, value } = getFieldNameAndInputValue(e)
         setFormData({
             name: name,
             value: value,
         });
+    }
+
+    const handleFormChangIsToChangePassword = (e: any) => {
+        const isToDisable = !e.target.checked
+        // @ts-ignore
+        const elementPassword = findDOMNode(formRef).querySelector(`input[name='password']`);
+        // @ts-ignore
+        const elementConfirmPassword = findDOMNode(formRef).querySelector(`input[name='confirmPassword']`);
+        elementPassword.disabled = isToDisable
+        elementPassword.value = ""
+        elementConfirmPassword.disabled = isToDisable
+        elementConfirmPassword.value = ""
+
+        handleFormChange(e)
     }
 
     function getFieldNameAndInputValue(e: any) {
@@ -156,7 +203,7 @@ export default function EditAccount() {
         if (isRoleChangedMarked === false) rolesMarked = rolesMarked.filter(item => item !== roleChanged)
 
         const name = "roles"
-        return {name, value: rolesMarked}
+        return { name, value: rolesMarked }
     }
 
     function getCheckBoxNormalValues(e: any) {
@@ -173,11 +220,14 @@ export default function EditAccount() {
         setFormErrors(newErrors)
         throwToastIfHasError(newErrors)
 
-        const result: APIResponse<any> | APIError = await MasterDataSource.createAccount(formData)
+        const result: APIResponse<any> | APIError = await MasterDataSource.editAccount(formData)
         ToastUtils.throwToastIfRequestIsNotSuccessful(result)
+        if (!ResponseUtils.responseIsNotSuccessful(result.status)) {
 
-        redirectToListAccount()
-        toast.success("Conta criada com sucesso!")
+            redirectToListAccount()
+            toast.success("Conta editada com sucesso!")
+        }
+
     }
 
     function throwToastIfHasError(errors: ErrorsFormEditAccount) {
@@ -199,30 +249,39 @@ export default function EditAccount() {
                     <Form.Group className={"p-2"}>
                         <Form.Label>Username</Form.Label>
                         <Form.Control onChange={handleFormChange} name="loginLabel" type="name" placeholder='username'
-                                      size='lg'
-                                      className='h-auto'
-                                      isInvalid={!!formErrors.loginLabel}
+                            size='lg'
+                            className='h-auto'
+                            isInvalid={!!formErrors.loginLabel}
                         />
-                        <Form.Control.Feedback type="invalid" children={formErrors.loginLabel}/>
+                        <Form.Control.Feedback type="invalid" children={formErrors.loginLabel} />
                     </Form.Group>
+                    <Form.Check
+                        className={"m-auto"}
+                        type="switch"
+                        id={"switch-account-enabled"}
+                        name={"isToChangePassword"}
+                        label={"insert a new password?"}
+                        onChange={handleFormChangIsToChangePassword}
+                        isInvalid={!!formErrors.enabled}
+                    />
                     <Form.Group className={"p-2"}>
                         <Form.Label>Password</Form.Label>
-                        <Form.Control onChange={handleFormChange} name="password" type="password"
-                                      placeholder='password'
-                                      size='lg'
-                                      className='h-auto'
-                                      isInvalid={!!formErrors.password}
+                        <Form.Control onChange={handleFormChange} disabled={true} name="password" type="password"
+                            placeholder='password'
+                            size='lg'
+                            className='h-auto'
+                            isInvalid={!!formErrors.password}
                         />
-                        <Form.Control.Feedback type="invalid" children={formErrors.password}/>
+                        <Form.Control.Feedback type="invalid" children={formErrors.password} />
                     </Form.Group>
                     <Form.Group className={"p-2"}>
                         <Form.Label>Confirm password</Form.Label>
-                        <Form.Control onChange={handleFormChange} name="confirmPassword" type="password"
-                                      placeholder='Confirm password' size='lg'
-                                      className='h-auto'
-                                      isInvalid={!!formErrors.confirmPassword}
+                        <Form.Control onChange={handleFormChange} disabled={true} name="confirmPassword" type="password"
+                            placeholder='Confirm password' size='lg'
+                            className='h-auto'
+                            isInvalid={!!formErrors.confirmPassword}
                         />
-                        <Form.Control.Feedback type="invalid" children={formErrors.confirmPassword}/>
+                        <Form.Control.Feedback type="invalid" children={formErrors.confirmPassword} />
                     </Form.Group>
                     <Form.Group className={"d-flex m-auto"}>
                         <Form.Check
@@ -235,13 +294,13 @@ export default function EditAccount() {
                             isInvalid={!!formErrors.enabled}
                         >
                         </Form.Check>
-                        <Form.Control.Feedback type="invalid" children={formErrors.enabled}/>
+                        <Form.Control.Feedback type="invalid" children={formErrors.enabled} />
                     </Form.Group>
                     <Form.Group className={"p-2 pt-5"}>
                         <div>
-                            <Form.Control type={"hidden"} isInvalid={!!formErrors.roles}/>
-                            <Form.Label>Permissions<br/>(hover on switch to show details)</Form.Label>
-                            <Form.Control.Feedback type="invalid" children={formErrors.roles}/>
+                            <Form.Control type={"hidden"} isInvalid={!!formErrors.roles} />
+                            <Form.Label>Permissions<br />(hover on switch to show details)</Form.Label>
+                            <Form.Control.Feedback type="invalid" children={formErrors.roles} />
                             {generateFormPermissionSwitches()}
                         </div>
                     </Form.Group>
