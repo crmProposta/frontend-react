@@ -10,12 +10,15 @@ import CreateAccount from "./views/master/users/CreateAccount/CreateAccount";
 import RouteGuard from "./components/RouteGuard";
 import ListAccount from "./views/master/users/ListAccount/ListAccount";
 import EditAccount from './views/master/users/EditAccount/EditAccount';
+import TestTable from './views/test/TestTable';
 
 function App() {
     return (
         <div className='app'>
             <BrowserRouter>
                 <Routes>
+
+                    <Route path="/test" element={<TestTable />}></Route>
                     <Route path="/login" element={<Login />}></Route>
                     <Route path="/register" element={<Register />}></Route>
 

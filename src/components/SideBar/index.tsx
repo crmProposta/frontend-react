@@ -10,7 +10,10 @@ import {FiArrowLeftCircle, FiArrowRightCircle} from "react-icons/fi";
 import {Roles} from "../../models/Backend-default/Roles";
 import {TokenStructure} from "../../models/Backend-default/TokenStructure";
 
-export default function Sidebar() {
+type Props = {
+    onToggleEvent: any
+}
+export default function Sidebar({onToggleEvent} : Props) {
 
     const [collapsed, setCollapsed] = useState(false);
     const [toggled, setToggled] = useState(false);
@@ -35,6 +38,7 @@ export default function Sidebar() {
 
     const handleCollapsedChange = () => {
         setCollapsed(!collapsed);
+        onToggleEvent()
     };
     const handleToggleSidebar = (value: any) => {
         setToggled(value);
@@ -42,7 +46,7 @@ export default function Sidebar() {
 
 
     return (<ProSidebar
-        style={{zIndex: 20}}
+        style={{zIndex: 20, height:"100rem", position: "fixed", left:"0"}}
         collapsed={collapsed}
         toggled={toggled}
         onToggle={handleToggleSidebar}

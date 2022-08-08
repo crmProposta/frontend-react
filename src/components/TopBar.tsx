@@ -31,8 +31,8 @@ export default function TopBar() {
     }
 
     return (
-        <nav className="navbar navbar-expand-lg navbar-dark bg-dark py-3 px-5 justify-content-between">
-            <a className="navbar-brand " href="/home">TopBar</a>
+        <nav className="navbar navbar-expand-lg navbar-dark bg-dark py-3 px-5 justify-content-between" style={{width:"100%", position: 'fixed'}}>
+            <a className="navbar-brand " href="/home"></a>
             <DropdownButton
                 align={{lg: 'end'}}
                 variant={"dark"}

@@ -2,19 +2,30 @@ import React from "react";
 import {Row} from "react-bootstrap";
 import TopBar from "./TopBar";
 import Sidebar from "./SideBar";
+import {useRef} from "react";
 
 type Props = {
     children: JSX.Element
 }
+
 export default function AppBar({children} : Props) {
+
+    const contentRef = useRef(null)
+    let active = false;
+    function changeChildrenMargin() {
+        let ml = active ? "260px" : "60px"
+        active = !active
+        //@ts-ignore
+        contentRef.current.style.marginLeft = ml
+    }
     return (
-        <div style={{height: "100vh", display: 'flex', overflow: 'scroll initial'}}>
-            <Sidebar/>
+        <div style={{height: "100%", width:"100%", display: 'flex'}}>
+            <Sidebar onToggleEvent={changeChildrenMargin}/>
             <div className={"w-100"}>
                 <Row>
                     <TopBar />
                 </Row>
-                <Row>
+                <Row ref={contentRef} style={{overflow: "auto", marginTop:"5%", marginLeft:"260px"}}>
                     {children}
                 </Row>
             </div>
