@@ -1,0 +1,7 @@
+#header_proposal_buttons * + * {
+    margin: 0 10px;
+}
+
+#header_proposal_buttons *:first-of-type {
+    margin-left: 10px;
+}

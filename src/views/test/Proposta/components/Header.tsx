@@ -1,6 +1,7 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React from "react";
 import { Button, Col, Row } from "react-bootstrap";
+import './Header.css';
 
 type PropsHeader = {
     name: string,
@@ -19,18 +20,18 @@ export default function Header(
         financiedAmount,
         unitCommision,
         onClickEdit,
-        onClickRemove, 
+        onClickRemove,
     }: PropsHeader) {
     return <div className="pb-0 mb-0">
-        <Row className="align-items-center pt-1 pl-3">
+        <Row className="align-items-center pt-1 pl-3 mx-1">
             <Col className="pt-2">
                 <p className="my-auto text-dark " style={{ fontSize: "18px" }}>
                     {name}
                     <span className="text-gray"> | {cpf}</span>
                 </p>
             </Col>
-            <Col className="m-auto">
-                <div className="d-flex align-items-center justify-content-between pt-2">
+            <Col className="m-auto p-2">
+                <div className="d-flex align-items-center justify-content-between pt-2" style={{ paddingRight: "2rem" }}>
                     <DivInline margin="r-3" className={["justify-content-between"]}>
                         <a tabIndex={0} className="text-light">
                             <span className="rounded italic"
@@ -40,22 +41,25 @@ export default function Header(
                         </a>
                     </DivInline>
                     <DivInline padding="t-2" margin="r-3">
-                        <h4>
-                            <span className="d-block text-right"> R$ {financiedAmount} </span>
-                        </h4>
+                        <div className="div-inline d-flex">
+                            <h4>
+                                <span className="d-block text-right"> R$ {financiedAmount} </span>
+                            </h4>
+
+                            <p className="pb-4 mr-3" style={{ fontSize: "15px" }}>
+                                <span className="d-block text-right text-sucess" > R$ {unitCommision} </span>
+                            </p>
+                        </div>
                     </DivInline>
-                    <DivInline padding="t-2" margin="r-3" style={{ fontSize: "15px" }}>
-                        <p><span className="d-block text-right text-sucess" > R$ {unitCommision} </span></p>
+                    <DivInline>
+                        <div id="header_proposal_buttons">
+                            <Button className="text-light" variant={"warning"} onClick={onClickEdit}>Edit</Button>
+                            <Button variant="warning" className="text-light">
+                                Duplicar
+                            </Button>
+                        </div>
                     </DivInline>
-                    <DivInline margin="r-3" style={{ padding: "0.4rem" }}>
-                        <Button className="text-light" variant={"warning"} onClick={onClickEdit}>Edit</Button>
-                    </DivInline>
-                    <DivInline margin="r-3" style={{ fontSize: "13px" }}>
-                        <Button variant="warning" className="text-light">
-                            Duplicar
-                        </Button>
-                    </DivInline>
-                    <DivInline margin="r-3">
+                    <DivInline>
                         <Button className="py-2 px-3" variant="danger" onClick={onClickRemove}>X</Button>
                     </DivInline>
                 </div>

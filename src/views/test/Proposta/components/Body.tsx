@@ -19,7 +19,7 @@ export default function Body({
     proposalType,
 }: Props) {
     return <>
-        <Row className="px-3 mt-3 pt-3 pb-0 w-100  fundoCinza">
+        <Row className="px-3 mx-1 mt-3 pt-3 pb-0 fundoCinza">
                 <Col className="col-auto p-0">
                     <a href="#collapsefundoCinza<?php echo $k; ?>" data-toggle="collapse">
                         <div className="animation-icon animation-down">

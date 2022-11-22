@@ -10,7 +10,7 @@ import CreateAccount from "./views/master/users/CreateAccount/CreateAccount";
 import RouteGuard from "./components/RouteGuard";
 import ListAccount from "./views/master/users/ListAccount/ListAccount";
 import EditAccount from './views/master/users/EditAccount/EditAccount';
-import TestTable from './views/test/TestTable';
+import PropostaPage from './views/test/PropostaPage';
 
 function App() {
     return (
@@ -18,7 +18,7 @@ function App() {
             <BrowserRouter>
                 <Routes>
 
-                    <Route path="/test" element={<TestTable />}></Route>
+                    <Route path="/test" element={<PropostaPage />}></Route>
                     <Route path="/login" element={<Login />}></Route>
                     <Route path="/register" element={<Register />}></Route>
 

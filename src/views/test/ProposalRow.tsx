@@ -3,7 +3,7 @@ import { Card } from "react-bootstrap";
 import Proposal from './Proposta/index';
 import Header from './Proposta/components/Header';
 
-export default function RowTable() {
+export default function ProposalRow() {
     return <Proposal id={"idHere"}>
 
         <Proposal.Header name={"name"} cpf={"000.000.000-00"} status={"AGUARDANDO ACEITE"}
