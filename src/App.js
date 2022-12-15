@@ -26,6 +26,8 @@ function App() {
                     <Route path="/" element={<RouteGuard component={Home} />}></Route>
                     <Route path="/home" element={<RouteGuard component={Home} />}></Route>
 
+                    <Route path="/proposals" element={<PropostaPage />}></Route>
+
                     {/* Masters routes */}
                     <Route path={"/master/create-account"} element={<RouteGuard component={CreateAccount} />}/>
                     <Route path={"/master/list-account"} element={<RouteGuard component={ListAccount}/>}/>

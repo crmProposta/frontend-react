@@ -1,19 +1,19 @@
-import React, {useState} from 'react';
-import {Link, useNavigate} from 'react-router-dom';
-import {Menu, MenuItem, ProSidebar, SidebarContent, SidebarFooter, SidebarHeader, SubMenu} from 'react-pro-sidebar';
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { Menu, MenuItem, ProSidebar, SidebarContent, SidebarFooter, SidebarHeader, SubMenu } from 'react-pro-sidebar';
 import CookieUtils from "../../utils/CookieUtils";
 import jwtDecode from "jwt-decode";
 import 'react-pro-sidebar/dist/css/styles.css';
 import './index.css';
-import {FaBars, FaRegAddressCard} from "react-icons/fa";
-import {FiArrowLeftCircle, FiArrowRightCircle} from "react-icons/fi";
-import {Roles} from "../../models/Backend-default/Roles";
-import {TokenStructure} from "../../models/Backend-default/TokenStructure";
+import { FaBars, FaRegAddressCard } from "react-icons/fa";
+import { FiArrowLeftCircle, FiArrowRightCircle } from "react-icons/fi";
+import { Roles } from "../../models/Backend-default/Roles";
+import { TokenStructure } from "../../models/Backend-default/TokenStructure";
 
 type Props = {
     onToggleEvent: any
 }
-export default function Sidebar({onToggleEvent} : Props) {
+export default function Sidebar({ onToggleEvent }: Props) {
 
     const [collapsed, setCollapsed] = useState(false);
     const [toggled, setToggled] = useState(false);
@@ -46,7 +46,7 @@ export default function Sidebar({onToggleEvent} : Props) {
 
 
     return (<ProSidebar
-        style={{zIndex: 20, height:"100rem", position: "fixed", left:"0"}}
+        style={{ zIndex: 20, height: "100rem", position: "fixed", left: "0" }}
         collapsed={collapsed}
         toggled={toggled}
         onToggle={handleToggleSidebar}
@@ -70,22 +70,22 @@ export default function Sidebar({onToggleEvent} : Props) {
                 YourCompanyName
             </div>
             <div className="closemenu"
-                 style={{
-                     position: 'absolute',
-                     cursor: "pointer",
-                     fontSize: 30,
-                     paddingRight: 10,
-                     lineHeight: "20px",
-                     zIndex: 99,
-                     right: 0,
-                     top: 55,
-                 }}
-                 onClick={handleCollapsedChange}>
+                style={{
+                    position: 'absolute',
+                    cursor: "pointer",
+                    fontSize: 30,
+                    paddingRight: 10,
+                    lineHeight: "20px",
+                    zIndex: 99,
+                    right: 0,
+                    top: 55,
+                }}
+                onClick={handleCollapsedChange}>
                 {/* changing menu collapse icon on click */}
                 {collapsed ? (
-                    <FiArrowRightCircle/>
+                    <FiArrowRightCircle />
                 ) : (
-                    <FiArrowLeftCircle/>
+                    <FiArrowLeftCircle />
                 )}
             </div>
 
@@ -133,30 +133,39 @@ export default function Sidebar({onToggleEvent} : Props) {
                         </SubMenu>
                     </SubMenu>
                 </SubMenu>
+            </Menu>
+
+            <Menu iconShape="circle">
+                <MenuItem
+                    icon={""}
+                    suffix={<span className="badge red">Novo</span>}
+                >
+                    Dashboard
+                    <Link to={"/proposals"} />
+                </MenuItem>
 
                 {/*Fim do template*/}
 
                 {hasMasterRole() && (
                     <SubMenu
                         title={"Master role"}
-                        icon={<FaRegAddressCard/>}
+                        icon={<FaRegAddressCard />}
                     >
                         <MenuItem>
                             Adicionar conta
-                            <Link to={"/master/create-account"}/>
+                            
                         </MenuItem>
                         <MenuItem>
                             Listar conta
-                            <Link to={"/master/list-account"}/>
+                            <Link to={"/master/list-account"} />
                         </MenuItem>
                     </SubMenu>
                 )}
 
-
             </Menu>
         </SidebarContent>
 
-        <SidebarFooter style={{textAlign: 'center'}}>
+        <SidebarFooter style={{ textAlign: 'center' }}>
             <div
                 className="sidebar-btn-wrapper"
                 style={{
@@ -170,8 +179,8 @@ export default function Sidebar({onToggleEvent} : Props) {
                     rel="noopener noreferrer"
                 >
 
-                        <span style={{whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden'}}>
-            </span>
+                    <span style={{ whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden' }}>
+                    </span>
                 </a>
             </div>
         </SidebarFooter>

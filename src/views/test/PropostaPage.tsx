@@ -3,7 +3,16 @@ import { Button, Col, Form, Row } from "react-bootstrap";
 import AppBar from "../../components/AppBar";
 import ProposalRow from "./ProposalRow";
 import { BsSearch } from "react-icons/bs";
+import { HiIdentification, HiOutlineIdentification } from "react-icons/hi";
+import { MdPermIdentity, MdOutlineCategory, MdOutlineGroups } from "react-icons/md";
+import { BsPersonBadge, BsDoorOpenFill } from "react-icons/bs";
+import { TiSortNumerically } from "react-icons/ti";
+import { RiDoorClosedLine } from "react-icons/ri";
+import { AiOutlineBank } from "react-icons/ai";
+
 import './test.css'
+import AdvancedSearch from './Proposta/components/search/AdvancedSearch';
+import AdvancedSearchForms from "./Proposta/components/search/AdvancedSearchForms";
 
 export default function PropostaPage() {
 
@@ -16,56 +25,17 @@ export default function PropostaPage() {
             </div>
 
             {
-            //SearchBar
+                //SearchBar
             }
             <Row className="d-flex d-inline w-75 m-auto">
-                <Col md={10} >
+                <Col md={10}>
                     <Form className='m-5 my-4 mx-auto'>
                         <Form.Group className="">
                             <Form.Label>Customer name</Form.Label>
                             <Form.Control className="p-3" type={"text"} placeholder={"Customer name"} />
                         </Form.Group>
-                        <div className="d-inline d-flex justify-content-between">
-                            <Form.Group>
-                                <Form.Label>Proposal ID</Form.Label>
-                                <Form.Control type={"text"} />
-                            </Form.Group>
-                            <Form.Group>
-                                <Form.Label>CPF</Form.Label>
-                                <Form.Control type={"text"} />
-                            </Form.Group>
-                            <Form.Group>
-                                <Form.Label>Seller</Form.Label>
-                                <Form.Control type={"text"} />
-                            </Form.Group>
-                        </div>
-                        <div className="d-inline d-flex justify-content-between">
-                            <Form.Group>
-                                <Form.Label>Proposal Number</Form.Label>
-                                <Form.Control type={"text"} />
-                            </Form.Group>
-                            <Form.Group>
-                                <Form.Label>Promotora</Form.Label>
-                                <Form.Control type={"text"} />
-                            </Form.Group>
-                            <Form.Group>
-                                <Form.Label>Sale's source</Form.Label>
-                                <Form.Control type={"text"} />
-                            </Form.Group>
-                        </div>
-                        <div className="d-inline d-flex justify-content-between">
-                            <Form.Group>
-                                <Form.Label>Bank</Form.Label>
-                                <Form.Control type={"text"} />
-                            </Form.Group>
-                            <Form.Group>
-                                <Form.Label>Type</Form.Label>
-                                <Form.Control type={"text"} />
-                            </Form.Group>
-                            <Form.Group>
-                                <Form.Label>Chunk</Form.Label>
-                                <Form.Control type={"text"} />
-                            </Form.Group>
+                        <div className="p-2">
+                            <AdvancedSearchForms/>
                         </div>
                     </Form>
                 </Col>
