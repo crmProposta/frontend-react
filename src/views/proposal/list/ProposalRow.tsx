@@ -1,7 +1,7 @@
 import React from "react";
 import { Card } from "react-bootstrap";
-import Proposal from './Proposta/index';
-import Header from './Proposta/components/Header';
+import Proposal from '../../../components/Proposta/index';
+import Header from '../../../components/Proposta/components/Header';
 
 export default function ProposalRow() {
     return <Proposal id={"idHere"}>

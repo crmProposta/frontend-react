@@ -2,7 +2,7 @@ import React, { useReducer, useRef, useState, useEffect } from "react";
 import { Button, Form, OverlayTrigger, Tooltip } from "react-bootstrap";
 import { useParams, useNavigate } from 'react-router-dom';
 import { toast } from "react-toastify";
-import AppBar from '../../../../components/AppBar';
+import AppBar from '../../../../components/core/AppBar';
 import MasterDataSource from "../../../../dataSource/MasterDataSource";
 import { APIError } from "../../../../models/Backend-default/APIError";
 import { APIResponse } from "../../../../models/Backend-default/APIResponse";

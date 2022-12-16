@@ -1,7 +1,7 @@
 import React from 'react';
 // @ts-ignore
 import {Route, Navigate, Outlet} from 'react-router-dom';
-import CookieUtils from "../utils/CookieUtils";
+import CookieUtils from "../../utils/CookieUtils";
 
 // @ts-ignore
 export default function RouteGuard({ component: Component, ...rest }){

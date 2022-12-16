@@ -1,7 +1,7 @@
 import React from 'react';
 import {Col, Container, Row} from "react-bootstrap";
 import "./auth.css";
-import Divider from "../Divider.jsx";
+import Divider from "../core/Divider.jsx";
 
 type Props = {
     children: JSX.Element| JSX.Element[],

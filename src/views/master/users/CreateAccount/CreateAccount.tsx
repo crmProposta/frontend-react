@@ -1,7 +1,7 @@
 import React, {useReducer, useRef, useState} from "react";
 import Form from "react-bootstrap/Form";
 import {Button, OverlayTrigger, Tooltip} from "react-bootstrap";
-import AppBar from "../../../../components/AppBar";
+import AppBar from "../../../../components/core/AppBar";
 import PERMISSIONS from "../../../../res/Permissions";
 import MasterDataSource from "../../../../dataSource/MasterDataSource";
 import {APIResponse} from "../../../../models/Backend-default/APIResponse";

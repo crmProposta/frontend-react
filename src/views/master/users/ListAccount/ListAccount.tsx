@@ -4,7 +4,7 @@ import { AccordionButton, Button, Modal } from "react-bootstrap";
 import BootstrapTable from 'react-bootstrap-table-next';
 import { toast } from "react-toastify";
 import { API } from "../../../../api/PropostaAPI";
-import AppBar from "../../../../components/AppBar";
+import AppBar from "../../../../components/core/AppBar";
 import MasterDataSource from "../../../../dataSource/MasterDataSource";
 import { APIError } from "../../../../models/Backend-default/APIError";
 import { APIResponse } from "../../../../models/Backend-default/APIResponse";

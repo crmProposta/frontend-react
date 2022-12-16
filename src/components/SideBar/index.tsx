@@ -140,7 +140,7 @@ export default function Sidebar({ onToggleEvent }: Props) {
                     icon={""}
                     suffix={<span className="badge red">Novo</span>}
                 >
-                    Dashboard
+                    Proposals
                     <Link to={"/proposals"} />
                 </MenuItem>
 
@@ -152,11 +152,11 @@ export default function Sidebar({ onToggleEvent }: Props) {
                         icon={<FaRegAddressCard />}
                     >
                         <MenuItem>
-                            Adicionar conta
+                            Create account
                             <Link to={"/master/create-account"} />
                         </MenuItem>
                         <MenuItem>
-                            Listar conta
+                            List account
                             <Link to={"/master/list-account"} />
                         </MenuItem>
                     </SubMenu>

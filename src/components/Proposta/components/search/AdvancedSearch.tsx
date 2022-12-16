@@ -1,7 +1,5 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { Col, Form } from 'react-bootstrap';
-import { IconType } from 'react-icons';
-import { HiOutlineIdentification } from 'react-icons/hi';
 
 type Props = {
     iconType: JSX.Element,

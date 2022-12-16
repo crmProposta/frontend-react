@@ -1,11 +1,11 @@
 import React from "react";
 import {FaUserCircle} from "react-icons/fa";
 import {Dropdown, DropdownButton} from "react-bootstrap";
-import CookieUtils from "../utils/CookieUtils";
+import CookieUtils from "../../utils/CookieUtils";
 import {useNavigate} from "react-router-dom";
 import jwtDecode from "jwt-decode";
-import {TokenStructure} from "../models/Backend-default/TokenStructure";
-import {Roles} from "../models/Backend-default/Roles";
+import {TokenStructure} from "../../models/Backend-default/TokenStructure";
+import {Roles} from "../../models/Backend-default/Roles";
 
 export default function TopBar() {
 
@@ -31,7 +31,7 @@ export default function TopBar() {
     }
 
     return (
-        <nav className="navbar navbar-expand-lg navbar-dark bg-dark py-3 px-5 justify-content-between" style={{width:"100%", position: 'fixed'}}>
+        <nav className="navbar navbar-expand-lg navbar-dark bg-dark py-3 px-5 justify-content-between" style={{width:"100%", zIndex: 10}}>
             <a className="navbar-brand " href="/home"></a>
             <DropdownButton
                 align={{lg: 'end'}}

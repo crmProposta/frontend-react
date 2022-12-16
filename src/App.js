@@ -7,10 +7,10 @@ import 'react-toastify/dist/ReactToastify.css';
 import Home from './views/Home';
 import Register from "./views/Register";
 import CreateAccount from "./views/master/users/CreateAccount/CreateAccount";
-import RouteGuard from "./components/RouteGuard";
+import RouteGuard from "./components/core/RouteGuard";
 import ListAccount from "./views/master/users/ListAccount/ListAccount";
 import EditAccount from './views/master/users/EditAccount/EditAccount';
-import PropostaPage from './views/test/PropostaPage';
+import PropostaPage from './views/proposal/list/PropostaPage';
 
 function App() {
     return (

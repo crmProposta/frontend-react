@@ -1,7 +1,7 @@
 import React from "react";
 import {Row} from "react-bootstrap";
 import TopBar from "./TopBar";
-import Sidebar from "./SideBar";
+import Sidebar from "../SideBar";
 import {useRef} from "react";
 
 type Props = {
@@ -13,7 +13,7 @@ export default function AppBar({children} : Props) {
     const contentRef = useRef(null)
     let active = false;
     function changeChildrenMargin() {
-        let ml = active ? "260px" : "60px"
+        let ml = active ? "260px" : "65px"
         active = !active
         //@ts-ignore
         contentRef.current.style.marginLeft = ml
@@ -25,7 +25,7 @@ export default function AppBar({children} : Props) {
                 <Row>
                     <TopBar />
                 </Row>
-                <Row ref={contentRef} style={{overflow: "auto", marginTop:"5%", marginLeft:"260px"}}>
+                <Row ref={contentRef} style={{overflow: "auto", marginTop:"2%", marginLeft:"260px"}}>
                     {children}
                 </Row>
             </div>

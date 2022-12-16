@@ -8,7 +8,7 @@ import {ResponseStatus} from "../models/Backend-default/APIResponseStatusEnum";
 import setTokensOnCookies from '../utils/CookieUtils';
 import {useNavigate} from 'react-router-dom'
 import BgBlueContainerWhite from "../components/BgBlueConcainterWhite/BgBlueContainerWhite";
-import AuthHeader from "../components/AuthHeader";
+import AuthHeader from "../components/core/AuthHeader";
 import CookieUtils from "../utils/CookieUtils";
 
 const formReducer = (state: any, event: any) => {
