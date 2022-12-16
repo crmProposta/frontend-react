@@ -244,7 +244,7 @@ export default function EditAccount() {
     return (
         <AppBar>
             <div className='w-100 mx-auto'>
-                <h2 className="p-5 text-center ">Create user account</h2>
+                <h2 className="p-5 text-center ">Edit user account</h2>
                 <Form ref={(form: any) => formRef = form} className='m-5 my-4 w-50 mx-auto' onSubmit={handleFormSubmit}>
                     <Form.Group className={"p-2"}>
                         <Form.Label>Username</Form.Label>

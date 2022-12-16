@@ -153,7 +153,7 @@ export default function Sidebar({ onToggleEvent }: Props) {
                     >
                         <MenuItem>
                             Adicionar conta
-                            
+                            <Link to={"/master/create-account"} />
                         </MenuItem>
                         <MenuItem>
                             Listar conta
